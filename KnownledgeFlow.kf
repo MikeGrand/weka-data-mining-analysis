@@ -1,0 +1,91 @@
+{
+	"flow_name" : "Miguel_Clustering",
+	"steps" : [
+		{
+			"class" : "weka.knowledgeflow.steps.Loader",
+			"properties" : {
+				"loader" : {
+					"type" : "loader",
+					"class" : "weka.core.converters.ArffLoader",
+					"filePath" : "C:/Users/migue/Desktop/ProyectoDeMineria/optdigits.arff",
+					"useRelativePath" : false
+				},
+				"name" : "ArffLoader"
+			},
+			"connections" : {
+				"dataSet" : [
+					"Remove"
+				]
+			},
+			"coordinates" : "94,145"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Filter",
+			"properties" : {
+				"filter" : {
+					"type" : "optionHandler",
+					"class" : "weka.filters.unsupervised.attribute.Remove",
+					"options" : "-R last"
+				},
+				"name" : "Remove"
+			},
+			"connections" : {
+				"dataSet" : [
+					"TrainingSetMaker"
+				]
+			},
+			"coordinates" : "242,151"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.TrainingSetMaker",
+			"properties" : {
+				"name" : "TrainingSetMaker"
+			},
+			"connections" : {
+				"trainingSet" : [
+					"SimpleKMeans"
+				]
+			},
+			"coordinates" : "382,163"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Clusterer",
+			"properties" : {
+				"clusterer" : {
+					"type" : "optionHandler",
+					"class" : "weka.clusterers.SimpleKMeans",
+					"options" : "-init 0 -max-candidates 100 -periodic-pruning 10000 -min-density 2.0 -t1 -1.25 -t2 -1.0 -N 2 -A \"weka.core.EuclideanDistance -R first-last\" -I 500 -num-slots 1 -S 10"
+				},
+				"loadClustererFileName" : "",
+				"name" : "SimpleKMeans"
+			},
+			"connections" : {
+				"batchClusterer" : [
+					"ClustererPerformanceEvaluator"
+				]
+			},
+			"coordinates" : "385,325"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.ClustererPerformanceEvaluator",
+			"properties" : {
+				"name" : "ClustererPerformanceEvaluator"
+			},
+			"connections" : {
+				"text" : [
+					"TextViewer"
+				]
+			},
+			"coordinates" : "206,299"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.TextViewer",
+			"properties" : {
+				"name" : "TextViewer"
+			},
+			"connections" : {
+			},
+			"coordinates" : "74,304"
+		}
+	]
+}
